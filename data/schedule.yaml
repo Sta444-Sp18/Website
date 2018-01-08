@@ -1,0 +1,192 @@
+startdate: "2018-01-09"
+dateFormat: 'Mon, Jan 2'
+schedule:
+- week: 0
+  day: 0
+  lecture: "Introduction"
+  readings: 
+  - text: Codeschool - Try R
+    link: https://www.codeschool.com/courses/try-r
+  notes: ""
+  slides: 1
+  screencast: "http://www.youtube.com"
+
+- week: 1
+  day: 0
+  lecture: "Using git and github"
+  readings:
+  - text: Happy Git and GitHub
+    link: http://happygitwithr.com/
+  - text: Try GitHub
+    link: https://try.github.io/
+  notes: ""
+  slides: 1
+
+- week: 1
+  day: 2
+  lecture: "Using the shell"
+  readings:
+  - text: Learn the command line
+    link: https://www.codecademy.com/en/courses/learn-the-command-line
+  notes: ""
+  screencast: "http://www.youtube.com"
+
+- week: 2
+  day: 0
+  lecture: "Logic in R"
+  readings:
+  - text: Google's R style guide
+    link: https://google-styleguide.googlecode.com/svn/trunk/Rguide.xml
+  - text: Hadley's R style guide
+    link: http://r-pkgs.had.co.nz/style.html
+  notes: ""
+
+- week: 2
+  day: 2
+  lecture: "R data structures"
+  readings: ""
+  notes: ""
+
+- week: 3
+  day: 0
+  lecture: "Subsetting"
+  readings: ""
+  notes: ""
+
+- week: 3
+  day: 2
+  lecture: "dplyr"
+  readings: ""
+  notes: ""
+
+- week: 4
+  day: 0
+  lecture: "Functional programming"
+  readings: ""
+  notes: ""
+
+- week: 4
+  day: 2
+  lecture: "More purrr"
+  readings: ""
+  notes: ""
+
+- week: 5
+  day: 0
+  lecture: "ggplot2"
+  readings: ""
+  notes: ""
+
+- week: 5
+  day: 2
+  lecture: "Visualization (pt. 1)"
+  readings: ""
+  notes: ""
+
+- week: 6
+  day: 0
+  lecture: "Visualization (pt. 2)"
+  readings: ""
+  notes: ""
+
+- week: 6
+  day: 2
+  lecture: "Regular expressions"
+  readings: ""
+  notes: ""
+
+- week: 7
+  day: 0
+  lecture: "Web scraping (pt. 1)"
+  readings: ""
+  notes: ""
+
+- week: 7
+  day: 2
+  lecture: "Web scraping (pt. 2)"
+  readings: ""
+  notes: ""
+
+- week: 8
+  day: 0
+  lecture: "Introduction to make"
+  readings: ""
+  notes: ""
+
+- week: 8
+  day: 2
+  lecture: "Shiny"
+  readings: ""
+  notes: ""
+
+- week: 9
+  day: 0
+  lecture: "<i>No class - Spring recess</i>"
+  readings: ""
+  notes: ""
+
+- week: 9
+  day: 2
+  lecture: "<i>No class - Spring recess</i>"
+  readings: ""
+  notes: ""
+
+- week: 10
+  day: 0
+  lecture: "Reactive data"
+  readings: ""
+  notes: ""
+
+- week: 10
+  day: 2
+  lecture: "Parallelization"
+  readings: ""
+  notes: ""
+
+- week: 11
+  day: 0
+  lecture: "Databases, sql, & dplyr"
+  readings: ""
+  notes: ""
+
+- week: 11
+  day: 2
+  lecture: "Bigish data"
+  readings: ""
+  notes: ""
+
+- week: 12
+  day: 0
+  lecture: "Spatial data"
+  readings: ""
+  notes: ""
+
+- week: 12
+  day: 2
+  lecture: "Precinct boundaries (pt. 1)"
+  readings: ""
+  notes: ""
+
+- week: 13
+  day: 0
+  lecture: "Precinct boundaries (pt. 2)"
+  readings: ""
+  notes: ""
+
+- week: 13
+  day: 2
+  lecture: "SparklyR"
+  readings: ""
+  notes: ""
+
+- week: 14
+  day: 0
+  lecture: "SparklyR & text data"
+  readings: ""
+  notes: ""
+
+- week: 14
+  day: 2
+  lecture: "Final Project Presentations"
+  readings: ""
+  notes: ""

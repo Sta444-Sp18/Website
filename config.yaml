@@ -1,0 +1,68 @@
+baseurl: "/"
+title: "Statistical Programming"
+author: "Colin Rundel"
+copyright: "&copy; 2018. All rights reserved."
+theme: blackburn
+ignoreFiles: ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
+
+
+menu:
+  main:
+  - name: Home
+    pre: <i class='fa fa-home fa-fw'></i>
+    weight: 1
+    identifier: home
+    url: "#schedule"  
+  - name: Syllabus
+    pre: <i class='fa fa-file-text-o fa-fw'></i>
+    weight: 2
+    identifier: syllabus
+    url: "#syllabus"
+  - name: Textbooks
+    pre: <i class='fas fa-book fa-fw'></i>
+    weight: 3
+    url: "#textbooks"
+  - name: Contact
+    pre: <i class='fa fa-phone fa-fw'></i>
+    weight: 4
+    url: "#contact"
+  - name: Software
+    pre: <i class='fa fa-laptop fa-fw'></i>
+    weight: 5
+    identifier: software
+    url: "#software"
+  - name: Github
+    pre: <i class='fa fa-github fa-fw'></i>
+    weight: 6
+    url: https://github.com/Sta323-Sp18/
+
+params:
+  subtitle: ""
+  course: "Sta 323"
+  semester: Spring 2018
+  highlightjs: androidstudio
+  highlightjs_extra_languages:
+    - yaml
+  dateFormat: '02 Jan 2006, 15:04'
+  sections:
+    - schedule
+    - syllabus
+    - textbooks
+    - contact
+    - software
+    - about
+  contact:
+    - name: Prof. Rundel
+      office: 204 Old Chemistry
+      email: rundel@gmail.com
+      hours: TBD or by appointment
+    - name: Abbas Zaidi
+      office: TBD
+      email: abbas.zaidi@duke.edu
+      hours: TBD
+    - name: Lisa Lebovici
+      office: TBD
+      email: Lisa Lebovici
+      hours: TBD
+
+  

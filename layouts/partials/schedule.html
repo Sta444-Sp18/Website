@@ -1,0 +1,59 @@
+<h2>Schedule</h2>
+
+<div class="schedule-tbl">
+  <table>
+    <colgroup>
+      <col style="width:2.5%">
+      <col style="width:auto">
+      <col style="width:auto">
+      <col style="width:auto">
+      <col style="width:40%">
+      <col style="width:60%">
+      <col style="width:2.5%">
+    </colgroup> 
+    <thead>
+      <tr>
+        <th></th>
+        <th>Date</th>
+        <th></th>
+        <th>Lecture</th>
+        <th>Readings</th>
+        <th>Notes</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {{ $schedule := .Data.schedule }}
+
+      {{ range $schedule.schedule }}
+        {{ $start := (time $schedule.startdate) }}
+        {{ $days := (add (mul (int .week) 7) (int .day)) }}
+        {{ $date := $start.AddDate 0 0 (int $days)}}
+        <tr class="schedule-other">
+          <td> </td>
+          <td class="schedule-date"> {{ dateFormat $schedule.dateFormat $date }}</td>
+          <td class="schedule-slides">
+            {{ with .slides }}
+              <i class="fas fa-tv fa-fw" style="color: #888888"></i>
+            {{ end }}
+            {{ with .screencast }}
+              <a href="{{ . }}"><i class="fab fa-youtube fa-fw" style="color: #ED3324"></i></a>
+            {{ end }}
+          </td>
+          <td class="schedule-title">{{ .lecture | safeHTML }} </td>
+          <td class="schedule-readings">
+            {{ if gt (len .readings) 0 }}
+              <ul>
+              {{ range .readings }}
+                <li> <a href="{{ .link }}">{{ .text }}</a> </li>
+              {{ end }}
+              </ul>
+            {{ end }}
+          </td>
+          <td class="schedule-notes">{{ .notes }}</td>
+          <td> </td>
+        </tr>
+      {{ end }}
+    </tbody>
+  </table>
+</div>

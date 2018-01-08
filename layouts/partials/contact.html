@@ -1,0 +1,11 @@
+<h2>Contact Information</h2>
+
+<h4>Office Hours:</h4>
+
+<ul>
+  {{ range .Params.contact }}
+  <li>
+    <a href="{{ .email }}">{{ .name }}</a> - {{ .office }} - {{ .hours }}
+  </li>
+  {{ end }}
+</ul>
