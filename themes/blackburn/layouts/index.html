@@ -1,0 +1,20 @@
+{{ partial "header.html" . }}
+
+<div class="header">
+  <h1>{{ .Title }}</h1>
+  <h2>{{ .Site.Params.subtitle }}</h2>
+</div>
+
+<div class="content" id="content">
+  <div class="wrapper">
+      
+    {{ range $section := .Site.Params.sections }}
+      <section class="{{ $section }}", id="{{ $section }}">
+      {{ partial $section $.Site }}
+      </section>
+    {{ end }}
+
+  </div>
+</div>
+
+{{ partial "footer.html" . }}
