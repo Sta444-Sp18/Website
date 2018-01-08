@@ -8,8 +8,6 @@ schedule:
   - text: Codeschool - Try R
     link: https://www.codeschool.com/courses/try-r
   notes: ""
-  slides: 1
-  screencast: "http://www.youtube.com"
 
 - week: 1
   day: 0
@@ -20,7 +18,6 @@ schedule:
   - text: Try GitHub
     link: https://try.github.io/
   notes: ""
-  slides: 1
 
 - week: 1
   day: 2
@@ -29,7 +26,6 @@ schedule:
   - text: Learn the command line
     link: https://www.codecademy.com/en/courses/learn-the-command-line
   notes: ""
-  screencast: "http://www.youtube.com"
 
 - week: 2
   day: 0
