@@ -29,12 +29,17 @@
         {{ $start := (time $schedule.startdate) }}
         {{ $days := (add (mul (int .week) 7) (int .day)) }}
         {{ $date := $start.AddDate 0 0 (int $days)}}
+        {{ $file_date := dateFormat "2006_01_02" $date }}
         <tr class="schedule-other">
           <td> </td>
           <td class="schedule-date"> {{ dateFormat $schedule.dateFormat $date }}</td>
           <td class="schedule-slides">
-            {{ with .slides }}
-              <i class="fas fa-tv fa-fw" style="color: #888888"></i>
+            
+	    {{ $slides := print "slides/slides_" $file_date ".html" }}
+	    {{ if (fileExists (print "static/" $slides)) }}
+              <a href="{{ $slides }}">
+                <i class="fas fa-tv fa-fw" style="color: #888888"></i>
+	      </a>
             {{ end }}
             {{ with .screencast }}
               <a href="{{ . }}"><i class="fab fa-youtube fa-fw" style="color: #ED3324"></i></a>

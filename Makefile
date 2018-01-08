@@ -4,19 +4,17 @@ BASEDIR ?= $(shell basename $(CURRENT))
 REMOTEDIR ?= ~/.public_html/$(BASEDIR)
 REMOTE ?= cr173@gort.stat.duke.edu:$(REMOTEDIR)
 
-POST_RMD_FILES := $(wildcard _knitr/*.Rmd)
-POST_HTML_FILES  := $(patsubst _knitr/%.Rmd, _posts/%.html, $(POST_RMD_FILES))
-SLIDE_HTML_FILES := $(patsubst _knitr/%.Rmd, slides/%.html, $(POST_RMD_FILES))
+SLIDE_RMD_FILES := $(wildcard static/slides/*.Rmd)
+SLIDE_HTML_FILES  := $(subst Rmd,html,$(SLIDE_RMD_FILES))
 
-HW_RMD_FILES := $(wildcard _homework/*.Rmd)
-HW_HTML_FILES  := $(patsubst _homework/%.Rmd, hw/%.html, $(HW_RMD_FILES))
+HW_RMD_FILES := $(wildcard static/homework/*.Rmd)
+HW_HTML_FILES  := $(subst Rmd,html, $(HW_RMD_FILES))
 
+.PHONY: clean push
 
-build: $(POST_HTML_FILES) $(SLIDE_HTML_FILES) $(HW_HTML_FILES)
-	Rscript util/clean_posts.R
-	jekyll build
+build: $(SLIDE_HTML_FILES) $(HW_HTML_FILES)
+	hugo
 
-.PHONY: clean
 clean:
 	rm -rf _site/*
 	rm -f _posts/*.html
@@ -25,24 +23,16 @@ clean:
 
 push: build
 	@echo "Syncing to $(REMOTE)"
-	@rsync -az _site/* $(REMOTE)
+	@rsync -az public/* $(REMOTE)
 
-_posts/%.html: _knitr/%.Rmd
+static/slides/%.html: static/slides/%.Rmd
 	@echo "Rendering post: $(@F)"
-	@Rscript --vanilla util/render_post.R $< $@
+	@Rscript -e "rmarkdown::render('$<')"
 
-slides/%.html: _knitr/%.Rmd
-	@echo "Rendering slides: $(@F)"
-	@touch $@
-	@Rscript --vanilla util/render_slides.R $< $@
-
-hw/%.html: _homework/%.Rmd
+static/homework/%.html: static/homework/%.Rmd
 	@echo "Rendering hw: $(@F)"
-	@Rscript --vanilla util/render_hw.R $< $@
+	@Rscript -e "rmarkdown::render('$<')"
 
-serve: $(POST_HTML_FILES) $(SLIDE_HTML_FILES) $(HW_HTML_FILES)
-	@open http://localhost:4000
-	@jekyll serve --baseurl ''
 
 
 
