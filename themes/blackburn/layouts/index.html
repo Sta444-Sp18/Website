@@ -1,20 +1,37 @@
-{{ partial "header.html" . }}
+<!DOCTYPE html>
+<html lang="en">
 
-<div class="header">
-  <h1>{{ .Title }}</h1>
-  <h2>{{ .Site.Params.subtitle }}</h2>
-</div>
+{{ partial "head.html" . }}
 
-<div class="content" id="content">
-  <div class="wrapper">
-      
-    {{ range $section := .Site.Params.sections }}
-      <section class="{{ $section }}", id="{{ $section }}">
-      {{ partial $section $.Site }}
-      </section>
-    {{ end }}
+<body>
+<div id="layout">
+
+  {{ partial "sidemenu.html" . }}
+
+  <div id="main">
+    
+    <div class="content" id="content">
+      <div class="wrapper">
+          
+        {{ range $section := .Site.Params.sections }}
+          <section class="{{ $section }}", id="{{ $section }}">
+          {{ partial $section $.Site }}
+          </section>
+        {{ end }}
+    
+      </div>
+    </div>
 
   </div>
 </div>
 
-{{ partial "footer.html" . }}
+<div style="text-align: center">
+  <small>
+    &copy; 2018. All rights reserved.
+  </small>
+</div>
+
+<br/>
+
+</body>
+</html>

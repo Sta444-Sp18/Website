@@ -1,38 +1,18 @@
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="{{ if .IsNode }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ else }}{{ with .Description }}{{ . }}{{ end }}{{ end }}">
-  {{.Hugo.Generator}}
+  {{ .Hugo.Generator }}
 
-  <title>{{ if .IsHome }}{{ .Title }}{{ else }}{{ .Title }} &middot; {{ .Site.Title }}{{ end }}</title>
+  <title>{{ .Site.Params.course }}</title>
 
-  <!-- CSS -->
-  {{ $purecss := "https://cdnjs.cloudflare.com/ajax/libs/pure/1.0.0/" }}
-  <link rel="stylesheet" href="{{ $purecss }}pure-min.css">
-  <link rel="stylesheet" href="{{ $purecss }}grids-responsive-min.css">
+  <link rel="stylesheet" href="https://unpkg.com/purecss@1.0.0/build/pure-min.css" integrity="sha384-nn4HPE8lTHyVtfCBi5yW9d20FjT8BJwUXyWZT9InLYax14RDjBj46LmSztkmNP9w" crossorigin="anonymous">
   
-  <link rel="stylesheet" href="css/side-menu.css">
-  <link rel="stylesheet" href="css/blackburn.css">
-  <link rel="stylesheet" href="css/conference.css">
-  
-
-
-  <!-- Icons -->
   <script defer src="https://use.fontawesome.com/releases/v5.0.0/js/all.js"></script>
   <script defer src="https://use.fontawesome.com/releases/v5.0.0/js/v4-shims.js"></script>
 
-  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet" type="text/css">
-
-  {{ with .Site.Params.highlightjs }}
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/{{ . }}.min.css">
-  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-  {{ range $.Site.Params.highlightjs_extra_languages }}
-  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/{{ . }}.min.js"></script>
-  {{ end }}
-  <script>hljs.initHighlightingOnLoad();</script>
-  {{ end }}
-
-  {{ partial "favicon.html" . }}
-
+  
+  <link rel="stylesheet" href="css/menu.css">
+  <link rel="stylesheet" href="css/blackburn.css">
+  <link rel="stylesheet" href="css/schedule.css">
 </head>

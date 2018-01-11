@@ -1,33 +1,20 @@
-<!-- Menu toggle -->
-<a href="#menu" id="menuLink" class="menu-link">
-  <!-- Hamburger icon -->
-  <span></span>
-</a>
-<div id="menu">
+<div class="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
+  
+  <a class="pure-menu-heading" href="">
+      <span style="display: inline-block; vertical-align: middle; font-size: 0.9em; text-align: center">
+        {{ .Site.Params.course | safeHTML }} <br/></small>
+        <span style="font-size: 0.75em">{{ .Site.Params.semester | safeHTML }}</span>
+      </span>
+      &nbsp;
+      {{ .Site.Title | safeHTML }}
+  </a>
 
-  {{ partial "brand.html" . }}
+  <ul class="pure-menu-list">
+    {{ range .Site.Menus.main }}
+      <li class="pure-menu-item">
+        <a class="pure-menu-link" {{ printf "href=%q" .URL | safeHTMLAttr }}>{{ .Pre }} {{ .Name }}</a>
+      </li>
+    {{end}}
+  </ul>
 
-  <div class="pure-menu">
-    <ul class="pure-menu-list">
-      {{ range .Site.Menus.main }}
-      {{ if .HasChildren }}
-        <li class="pure-menu-item pure-menu-has-children">
-          <a class="pure-menu-link" href="#">{{ .Pre }} {{ .Name }}</a>
-          <ul class="pure-menu-children">
-            {{ range .Children }}
-            <li class="pure-menu-item">
-              <a href="{{ .URL }}">{{ .Name }}</a>
-            </li>
-            {{ end }}
-          </ul>
-      {{else}}
-        <li class="pure-menu-item">
-          <a class="pure-menu-link" {{ printf "href=%q" .URL | safeHTMLAttr }}>{{ .Pre }} {{ .Name }}</a>
-      {{end}}
-        </li>
-      {{end}}
-    </ul>
-  </div>
-
-  {{ partial "copyright.html" . }}
 </div>

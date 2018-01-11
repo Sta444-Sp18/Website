@@ -1,0 +1,49 @@
+.home-menu {
+    padding: 0em;
+    text-align: center;
+    box-shadow: 0 1px 1px rgba(0,0,0, 0.10);
+    vertical-align: middle;
+    background: #2d3e50;
+}
+
+.pure-menu.pure-menu-fixed {
+    /* Fixed menus normally have a border at the bottom. */
+    border-bottom: none;
+    /* I need a higher z-index here because of the scroll-over effect. */
+    z-index: 4;
+}
+
+.home-menu .pure-menu-heading {
+    color: white;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    text-transform: none;
+}
+
+.home-menu a,
+.home-menu a:visited {
+    color: #FFFFFF  ;
+    padding: 10px 10px;
+}
+
+.home-menu ul {
+    padding-right: 10px;
+}
+
+.home-menu li a:hover,
+.home-menu li a:focus {
+    background: none;
+    border: none;
+    color: #AECFE5;
+}
+
+@media (min-width: 48em) {
+    .home-menu {
+        text-align: left;
+    }
+
+    .home-menu ul {
+        float: right;
+    }
+}

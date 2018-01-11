@@ -1,44 +1,4 @@
 /* =============================================================================
-   MAIN LAYOUT
-   ========================================================================== */
-
-.wrapper {
-  margin: 0 auto;
-  width: 100%;
-  position: relative;
-}
-
-/* =============================================================================
-   Section stuff
-   ========================================================================== */
-
-section {
-  padding-bottom: 1em;
-}
-
-section p {
-  font-size: 0.9em;
-  line-height: 1.2em;
-  padding: 0em 0em 0em 1em;
-}
-
-section ul {
-  font-size: 0.9em;
-  line-height: 1.2em;
-  margin: 0.5em 0em;
-}
-
-section li {
-  padding-bottom: 0.3em;
-}
-
-section h4 {
-  margin: 1.5em 0em 0em 0em;
-}
-
-
-
-/* =============================================================================
    SCHEDULE
    ========================================================================== */
 
@@ -68,7 +28,7 @@ section h4 {
 .schedule-tbl td,
 .schedule-tbl th {
   position: relative;
-  padding: 10px 5px;
+  padding: 10px 10px;
   font-size: 1em;
   line-height: 1em;
   text-align: left;
@@ -94,15 +54,14 @@ section h4 {
 }
 
 .schedule-tbl .schedule-slides {
-  text-align: center;
-  padding: 5px 5px 5px 20px;
-  font-size: 0.9em;
+  white-space: nowrap;
+  font-size: 1em;
 }
 
 .schedule-tbl .schedule-title {
   white-space: nowrap;
 }
-
+  
 .schedule-tbl .schedule-readings ul {
   padding: 0;
   padding-left: 15px;

@@ -1,15 +1,14 @@
 baseurl: "/"
-title: "Statistical Programming"
-author: "Colin Rundel"
-copyright: "&copy; 2018. All rights reserved."
+title: "Spatio-Temporal Modeling"
+author: "Colin Rundel"    
 theme: blackburn
 ignoreFiles: ["\\.Rmd$", "\\.Rmarkdown$", "_files$", "_cache$"]
 
 
 menu:
   main:
-  - name: Home
-    pre: <i class='fa fa-home fa-fw'></i>
+  - name: Schedule
+    pre: <i class="far fa-clock fa-fw"></i>
     weight: 1
     identifier: home
     url: "#schedule"  
@@ -26,43 +25,31 @@ menu:
     pre: <i class='fa fa-phone fa-fw'></i>
     weight: 4
     url: "#contact"
-  - name: Software
-    pre: <i class='fa fa-laptop fa-fw'></i>
-    weight: 5
-    identifier: software
-    url: "#software"
   - name: Github
     pre: <i class='fa fa-github fa-fw'></i>
-    weight: 6
-    url: https://github.com/Sta323-Sp18/
+    weight: 5
+    url: https://github.com/Sta444-Sp18/
 
 params:
   subtitle: ""
-  course: "Sta 323"
+  course: "Sta 444/644"
   semester: Spring 2018
   highlightjs: androidstudio
   highlightjs_extra_languages:
     - yaml
-  dateFormat: '02 Jan 2006, 15:04'
   sections:
     - schedule
     - syllabus
     - textbooks
     - contact
-    - software
     - about
   contact:
     - name: Prof. Rundel
       office: 204 Old Chemistry
       email: rundel@gmail.com
       hours: TBD or by appointment
-    - name: Abbas Zaidi
+    - name: Phil White
       office: TBD
-      email: abbas.zaidi@duke.edu
+      email: philip.a.white@duke.edu
       hours: TBD
-    - name: Lisa Lebovici
-      office: TBD
-      email: Lisa Lebovici
-      hours: TBD
-
-  
+    
