@@ -4,10 +4,12 @@ schedule:
 - week: 0
   day: 2
   lecture: Introduction
+  notes: <a href="https://duke.qualtrics.com/jfe/form/SV_eb0Z6n8D7UWGqUt">Enrollment</a>
 
 - week: 0
   day: 3
   lecture: <i>No Lab</i>
+  lab: true
 
 - week: 1
   day: 0

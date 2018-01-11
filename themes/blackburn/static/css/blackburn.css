@@ -38,11 +38,11 @@ section h4 {
 }
 
 .active {
-  color: #222;
+  color: #262626;
 }
 
 .inactive {
-  color: rgba(34,34,34,0.3);
+  color: #E5E5E5
 }
 
 .youtube {
@@ -97,12 +97,12 @@ section h4 {
 }
 
 a {
-  color: #2d3e50; 
+  color: #0680CD; 
   text-decoration: none;
 }
 
 a:visited {
-  color: #2d3e50;
+  color: #0680CD;
 }
 
 i {

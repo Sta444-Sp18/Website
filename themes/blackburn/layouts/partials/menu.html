@@ -1,13 +1,13 @@
 <div class="home-menu pure-menu pure-menu-horizontal pure-menu-fixed">
   
-  <a class="pure-menu-heading" href="">
-      <span style="display: inline-block; vertical-align: middle; font-size: 0.9em; text-align: center">
-        {{ .Site.Params.course | safeHTML }} <br/></small>
-        <span style="font-size: 0.75em">{{ .Site.Params.semester | safeHTML }}</span>
+  <div>
+      <span id="class">
+        {{ .Site.Params.course | safeHTML }} <br/>
+        <span id="semester">{{ .Site.Params.semester | safeHTML }}</span>
       </span>
       &nbsp;
       {{ .Site.Title | safeHTML }}
-  </a>
+  </div>
 
   <ul class="pure-menu-list">
     {{ range .Site.Menus.main }}
@@ -16,5 +16,4 @@
       </li>
     {{end}}
   </ul>
-
 </div>

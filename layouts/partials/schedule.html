@@ -35,33 +35,36 @@
           <td class="schedule-date"> {{ dateFormat $schedule.dateFormat $date }}</td>
           <td class="schedule-slides">
             
-            {{ $slides_pdf := print "slides/slides_" $file_date ".pdf" }}
-            {{ $slides_ann := print "slides/slides_" $file_date "_ann.pdf" }}
-            {{ $slides_rmd := print "slides/slides_" $file_date ".Rmd" }}
-            
-            {{ if (fileExists (print "static/" $slides_pdf)) }}
-              <a href="{{ $slides_pdf }}"><i class="far fa-file fa-fw active"></i></a>
-            {{ else }}
-              <i class="far fa-file fa-fw inactive"></i>
+            {{ if (not .lab)}}
+              {{ $slides_pdf := print "slides/slides_" $file_date ".pdf" }}
+              {{ $slides_ann := print "slides/slides_" $file_date "_ann.pdf" }}
+              {{ $slides_rmd := print "slides/slides_" $file_date ".Rmd" }}
+              
+              {{ if (fileExists (print "static/" $slides_pdf)) }}
+                <a href="{{ $slides_pdf }}"><i class="far fa-file fa-fw active"></i></a>
+              {{ else }}
+                <i class="far fa-file fa-fw inactive"></i>
+              {{ end }}
+  
+              {{ if (fileExists (print "static/" $slides_ann)) }}
+                <a href="{{ $slides_ann }}"><i class="far fa-file-image fa-fw active"></i></a>
+              {{ else }}
+                <i class="far fa-file-image fa-fw inactive"></i>
+              {{ end }}
+  
+              {{ if (fileExists (print "static/" $slides_rmd)) }}
+                <a href="{{ $slides_rmd }}"><i class="far fa-file-code fa-fw active"></i></a>
+              {{ else }}
+                <i class="far fa-file-code fa-fw inactive"></i>
+              {{ end }}
+  
+              {{ if .screencast }}
+                <a href="{{ .screencast | safeHTMLAttr}}"><i class="fab fa-youtube fa-fw youtube"></i></a>
+              {{ else }}
+                <i class="fab fa-youtube fa-fw inactive"></i>
+              {{ end }}
             {{ end }}
 
-            {{ if (fileExists (print "static/" $slides_ann)) }}
-              <a href="{{ $slides_ann }}"><i class="far fa-file-image fa-fw active"></i></a>
-            {{ else }}
-              <i class="far fa-file-image fa-fw inactive"></i>
-            {{ end }}
-
-            {{ if (fileExists (print "static/" $slides_rmd)) }}
-              <a href="{{ $slides_rmd }}"><i class="far fa-file-code fa-fw active"></i></a>
-            {{ else }}
-              <i class="far fa-file-code fa-fw inactive"></i>
-            {{ end }}
-
-            {{ if .screencast }}
-              <a href="{{ .screencast | safeHTMLAttr}}"><i class="fab fa-youtube fa-fw youtube"></i></a>
-            {{ else }}
-              <i class="fab fa-youtube fa-fw inactive"></i>
-            {{ end }}
           </td>
           <td class="schedule-title">{{ .lecture | safeHTML }} </td>
           <td class="schedule-readings">
@@ -71,7 +74,7 @@
                 {{ range . }}
                   <li> 
                     {{ if .link }}
-                      <a href="{{ .link }}">{{ .text }}</a> 
+                      <a href="{{ .link | safeHTMLAttr}}">{{ .text }}</a> 
                     {{ else }}
                       {{ .text }}
                     {{ end }}
@@ -81,7 +84,11 @@
               {{ end }}
             {{ end }}
           </td>
-          <td class="schedule-notes">{{ .notes }}</td>
+          <td class="schedule-notes">
+            {{ if .notes }}
+              {{ .notes | safeHTML }}
+            {{ end }}
+          </td>
           <td> </td>
         </tr>
       {{ end }}

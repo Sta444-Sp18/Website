@@ -4,31 +4,38 @@
     box-shadow: 0 1px 1px rgba(0,0,0, 0.10);
     vertical-align: middle;
     background: #2d3e50;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .pure-menu.pure-menu-fixed {
-    /* Fixed menus normally have a border at the bottom. */
     border-bottom: none;
-    /* I need a higher z-index here because of the scroll-over effect. */
     z-index: 4;
 }
 
-.home-menu .pure-menu-heading {
+.home-menu div,
+.home-menu ul {
     color: white;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    padding-left: 10px;
+    padding: 10px;
     text-transform: none;
+}
+
+.home-menu #class {
+    display: inline-block; 
+    font-size: 0.9em;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.home-menu #semester {
+    font-size: 0.75em;
 }
 
 .home-menu a,
 .home-menu a:visited {
     color: #FFFFFF  ;
     padding: 10px 10px;
-}
-
-.home-menu ul {
-    padding-right: 10px;
 }
 
 .home-menu li a:hover,
@@ -38,12 +45,3 @@
     color: #AECFE5;
 }
 
-@media (min-width: 48em) {
-    .home-menu {
-        text-align: left;
-    }
-
-    .home-menu ul {
-        float: right;
-    }
-}
