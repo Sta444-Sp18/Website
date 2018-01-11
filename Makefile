@@ -13,7 +13,7 @@ HW_HTML_FILES  := $(subst Rmd,html, $(HW_RMD_FILES))
 .PHONY: clean push
 
 build: $(SLIDE_HTML_FILES) $(HW_HTML_FILES)
-	hugo
+	@hugo
 
 clean:
 	rm -rf _site/*
