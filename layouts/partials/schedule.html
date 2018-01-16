@@ -29,16 +29,16 @@
         {{ $start := (time $schedule.startdate) }}
         {{ $days := (add (mul (int .week) 7) (int .day)) }}
         {{ $date := $start.AddDate 0 0 (int $days)}}
-        {{ $file_date := dateFormat "2006_01_02" $date }}
+        
         <tr class="schedule-other">
           <td> </td>
           <td class="schedule-date"> {{ dateFormat $schedule.dateFormat $date }}</td>
           <td class="schedule-slides">
             
             {{ if (not .lab)}}
-              {{ $slides_pdf := print "slides/slides_" $file_date ".pdf" }}
-              {{ $slides_ann := print "slides/slides_" $file_date "_ann.pdf" }}
-              {{ $slides_rmd := print "slides/slides_" $file_date ".Rmd" }}
+              {{ $slides_pdf := print "slides/" .slides ".pdf" }}
+              {{ $slides_ann := print "slides/" .slides "_ann.pdf" }}
+              {{ $slides_rmd := print "slides/" .slides ".Rmd" }}
               
               {{ if (fileExists (print "static/" $slides_pdf)) }}
                 <a href="{{ $slides_pdf }}"><i class="far fa-file fa-fw active"></i></a>

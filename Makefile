@@ -27,7 +27,7 @@ push: build
 
 static/slides/%.html: static/slides/%.Rmd
 	@echo "Rendering post: $(@F)"
-	@Rscript -e "rmarkdown::render('$<')"
+#	@Rscript -e "rmarkdown::render('$<')"
 
 static/homework/%.html: static/homework/%.Rmd
 	@echo "Rendering hw: $(@F)"
