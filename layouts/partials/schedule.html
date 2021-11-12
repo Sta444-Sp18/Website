@@ -36,9 +36,9 @@
           <td class="schedule-slides">
             
             {{ if (not .lab)}}
-              {{ $slides_pdf := print "slides/" .slides ".pdf" }}
-              {{ $slides_ann := print "slides/" .slides "_ann.pdf" }}
-              {{ $slides_rmd := print "slides/" .slides ".Rmd" }}
+              {{ $slides_pdf := print "slides/" .slides "/" .slides ".pdf" }}
+              {{ $slides_ann := print "slides/annotated/" .slides "_ann.pdf" }}
+              {{ $slides_rmd := print "slides/" .slides "/" .slides ".Rmd" }}
               
               {{ if (fileExists (print "static/" $slides_pdf)) }}
                 <a href="{{ $slides_pdf }}"><i class="far fa-file fa-fw active"></i></a>

@@ -14,52 +14,91 @@ schedule:
 - week: 1
   day: 0
   lecture: Linear Models
-  slides: Lec1
+  slides: Lec01
+  screencast: https://youtu.be/l7ZJ8s8d9mM
+  notes: <a href="https://www.math.uwaterloo.ca/~hwolkowi/matrixcookbook.pdf">Matrix Cookbook</a>
 
 - week: 1
   day: 2
-  lecture: Generalized Linear Models (pt. 1)
+  lecture: <i>Class canceled - Snow day</i>
+
+- week: 1
+  day: 3
+  lecture: <i>No Lab</i>
+  lab: true
 
 - week: 2
+  day: 0
+  lecture: Diagnostics and Model Evaluation
+  slides: Lec02
+  screencast: https://youtu.be/DpUpCLeZ2JE
+  readings:
+  - text: Gelman, et. al - R^2 for Bayesian regression models
+    link: http://www.stat.columbia.edu/~gelman/research/unpublished/bayes_R2.pdf
+
+- week: 2
+  day: 2
+  lecture: Generalized Linear Models (pt. 1)
+  slides: Lec03
+  screencast: https://youtu.be/CfR9mwN3JJA
+  readings:
+  - text: "Gelman & Hill 6"
+  notes: ""
+
+- week: 3
   day: 0
   lecture: Generalized Linear Models (pt. 2)
-
-- week: 2
-  day: 2
-  lecture: Diagnostics and model evaluation
-
-- week: 3
-  day: 0
-  lecture: Random effects models
+  slides: Lec04
+  readings:
+  - text: "Gelman & Hill 5.6-5.8"
+  notes: ""
+  
 
 - week: 3
   day: 2
-  lecture: Discrete time series models
-  readings: 
-  - text: "Shumway 1.2-1.6, 2.1-2.3"
+  lecture: Random Effect Models
+  slides: Lec05
+  screencast: https://youtu.be/UQN3rAf9xm0
   notes: ""
 
 - week: 4
   day: 0
-  lecture: AR models
+  lecture: Discrete Time Series
+  slides: Lec06
+  screencast: https://youtu.be/fPEZ9HmuvlM
   readings:
-  - text: "Shumway 2, 3.1-3.4"
+  - text: "Shumway 1.2-1.6, 2, 3.1-3.4"
 
 - week: 4
   day: 2
-  lecture: MA and ARMA models
+  lecture: Differencing and AR(1) models
+  slides: Lec07
+  screencast: https://youtu.be/spjaCSjz4AM
   readings:
   - text: "Shumway 3.2, 3.4"
 
 - week: 5
   day: 0
-  lecture: ARIMA models
+  lecture: ARMA models
+  slides: Lec08
+  screencast: https://youtu.be/_NLdem3vpTk
   readings:
   - text: "Shumway 3.7, 3.8"
 
 - week: 5
   day: 2
+  lecture: ARIMA models
+  slides: Lec09
+  screencast: https://youtu.be/fclZF4RzNVo
+  readings:
+  - text: "Shumway 3.7, 3.8"
+
+
+- week: 6
+  day: 0
   lecture: Model fitting and forecasting
+  slides: Lec10
+  screencast: https://youtu.be/DG5ug-IYRuQ
   readings:
   - text: "Shumway 3.5, 3.6"
   - text: "Congdon 5.1, 5.2"
@@ -67,33 +106,44 @@ schedule:
     link: https://www.otexts.org/fpp/8
 
 - week: 6
-  day: 0
+  day: 2
   lecture: Seasonal ARIMA
+  slides: Lec11
+  screencast: https://youtu.be/IQ1O4GQM_no
   readings:
   - text: "Shumway 3.9"
   - text: "Hyndman 8.9"
     link: "https://www.otexts.org/fpp/8/9"
+  notes: "<a href='https://youtu.be/Ouzlx89FuYU'>Example</a>"
 
-- week: 6
+- week: 7
+  day: 0
+  lecture: Midterm 1
+
+- week: 7
   day: 2
   lecture: Gaussian Process models (pt. 1)
+  slides: Lec12
+  screencast: https://www.youtube.com/watch?v=DHL3PjZGO40&index=11&t=0s&list=PLFC0tbdcUnf646SbKCkE3zZt1zZzjGVdu
+  readings:
+  - text: "Rasmussen & Williams 2, 4"
+    link: http://www.gaussianprocess.org/gpml/chapters/RW.pdf
 
-- week: 7
+- week: 8
   day: 0
   lecture: Gaussian Process models (pt. 2)
-
-- week: 7
-  day: 2
-  lecture: Complex Covariance Functions (pt. 1)
-
-- week: 8
-  day: 0
-  lecture: Complex Covariance Functions (pt. 2)
+  slides: Lec13
 
 - week: 8
   day: 2
-  lecture: Catch up
-
+  lecture: Covariance Functions
+  slides: Lec14
+  screencast: https://youtu.be/D_RYKJfysbU
+  readings:
+  - text: "Rasmussen & Williams 4, 5"
+    link: http://www.gaussianprocess.org/gpml/chapters/RW.pdf
+  - text: "Kernel Cookbook"
+    link: http://www.cs.toronto.edu/~duvenaud/cookbook/index.html
 
 - week: 9
   day: 0
@@ -105,35 +155,63 @@ schedule:
 
 - week: 10
   day: 0
-  lecture: Spatial Data and Cartography (pt. 1)
+  lecture: GPs & GLMs + Spatial Data (pt. 1)
+  slides: Lec15
+  screencast: https://youtu.be/64vdI5l7CUw
+  readings:
+  - text: "sf Vignettes"
+    link: https://cran.r-project.org/web/packages/sf/vignettes/
 
 
 - week: 10
   day: 2
   lecture: Spatial Data and Cartography (pt. 2)
+  slides: Lec16
+  screencast: https://youtu.be/1-ijkx2RAbs
+
 
 - week: 11
   day: 0
   lecture: Models for areal data (pt. 1)
+  slides: Lec17
+  readings:
+  - text: Banerjee, Carlin, Gelfand Ch. 4
 
 - week: 11
   day: 2
   lecture: Models for areal data (pt. 2)
+  slides: Lec18
+  screencast: https://youtu.be/Ghhz0LnLzT0
 
 - week: 12
   day: 0
-  lecture: Point reference data (pt. 1)
+  lecture: GLMs for areal data + Point referenced data (pt. 1)
+  slides: Lec19
+  screencast: https://youtu.be/aZDnyJH0HGo
 
 - week: 12
   day: 2
-  lecture: Point reference data (pt. 2)
+  lecture: Point referenced data (pt. 2)
+  slides: Lec20
+  screencast: https://youtu.be/k8zvkKoCcmI
 
 - week: 13
   day: 0
   lecture: Computation and GP Models
+  slides: Lec21
+  screencast: https://youtu.be/qzYD5lNixtM
 
 - week: 13
   day: 2
   lecture: Spatio-temporal models
+  slides: Lec22
+
+- week: 14
+  day: 0
+  lecture: Midterm 2
+
+- week: 16
+  day: 2
+  lecture: Project due by 11:59 pm
 
 

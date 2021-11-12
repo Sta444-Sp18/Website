@@ -1,0 +1,647 @@
+---
+title: "Lecture 18" 
+subtitle: "Fitting CAR and SAR Models"
+author: "Colin Rundel"
+date: "3/29/2018"
+fontsize: 11pt
+output: 
+  beamer_presentation:
+    theme: metropolis
+    highlight: pygments
+    fig_caption: false
+    latex_engine: xelatex
+    keep_tex: true
+    includes:
+      in_header: ../settings.tex
+---
+
+```{r setup, include=FALSE}
+library(dplyr)
+library(ggplot2)
+library(patchwork)
+library(sf)
+library(rstan)
+
+set.seed(20180329)
+```
+
+```{r config, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  fig.width=7,
+  fig.height=4.5,
+  out.width="\\textwidth",
+  fig.align="center",
+  echo=TRUE,
+  warning=FALSE
+)
+
+ggplot2::theme_set(ggplot2::theme_bw())
+
+rstan::rstan_options(auto_write = TRUE)
+options(mc.cores = parallel::detectCores())
+
+source("../util.R")
+```
+
+# Fitting areal models
+
+## CAR vs SAR
+
+* Simultaneous Autogressve (SAR)
+
+$$ y(s_i) = \phi \sum_{j=1}^n W_{ij} ~ y(s_j) + \epsilon $$
+
+$$ \symbf{y} \sim \mathcal{N}(0,~\sigma^2 \, ((\symbf{I}-\phi \symbf{W})^{-1}) ((\symbf{I}-\phi \symbf{W})^{-1})^t )$$
+
+* Conditional Autoregressive (CAR)
+
+$$ y(s_i)|\symbf{y}_{-s_i} \sim \mathcal{N}\left(\phi\sum_{j=1}^n {W}_{ij} ~ y(s_j),~ \sigma^2 \right) $$
+
+$$ \symbf{y} \sim \mathcal{N}(0,~\sigma^2 \, (\symbf{I}-\phi \symbf{W})^{-1})$$
+
+## Some generalizations {.t}
+
+Generally speaking we will want to work with a scaled / normalized version of the weight matrix,
+$$ \frac{W_{ij}}{W_{i\boldsymbol{\cdot}}}  $$
+
+When $W$ is an adjacency matrix we can express this as 
+$$ \symbf{D}^{-1} \symbf{W} $$
+where $\symbf{D}^{-1} = \text{diag}(1/|N(s_i)|)$. 
+
+
+We can also allow $\sigma^2$ to vary between locations, we can define this as $\symbf{D}_\tau = \text{diag}(1/\sigma^2_i)$ and most often we use
+$$ \symbf{D}_\sigma^{-1} = \text{diag}\left(\frac{\sigma^2}{|N(s_i)|}\right) =  \sigma^2 \symbf{D}^{-1}.  $$
+
+## Revised SAR Model {.t}
+
+* Formula Model
+$$ y(s_i) = X_{i\cdot}\beta + \phi \sum_{j=1}^n D^{-1}_{jj} \, W_{ij} \, \big(y(s_j) - X_{j\cdot}\beta\big) + \epsilon_i $$
+$$ \symbf{\epsilon} \sim \mathcal{N}(\symbf{0},\, \sigma^2 \symbf{D}^{-1}) $$
+* Joint Model
+\pause
+$$
+\begin{aligned}
+\symbf{y} = \symbf{X}\symbf{\beta} + \phi \symbf{D}^{-1} \symbf{W} ~\big(\symbf{y}-\symbf{X}\symbf{\beta}\big) + \symbf{\epsilon} \\
+\big(\symbf{y}-\symbf{X}\symbf{\beta}\big) = \phi \symbf{D}^{-1} \symbf{W} ~\big(\symbf{y}-\symbf{X}\symbf{\beta}\big) + \symbf{\epsilon} \\
+\big(\symbf{y}-\symbf{X}\symbf{\beta}\big)(\symbf{I}-\phi\symbf{D}^{-1}\symbf{W})^{-1} = \symbf{\epsilon} \\
+\symbf{y} = \symbf{X}\symbf{\beta} + (\symbf{I} - \phi \symbf{D}^{-1} \symbf{W})^{-1} \symbf{\epsilon}
+\end{aligned}
+$$
+\pause
+$$
+\symbf{y} \sim \mathcal{N}\left(\symbf{X}\symbf{\beta}, (\symbf{I} - \phi \symbf{D}^{-1} \symbf{W})^{-1} \sigma^2 \symbf{D}^{-1} \big((\symbf{I} - \phi \symbf{D}^{-1} \symbf{W})^{-1}\big)^t \right)
+$$
+
+
+## Revised CAR Model {.t}
+
+* Conditional Model
+$$ y(s_i)|\symbf{y}_{-s_i} \sim \mathcal{N}\left(X_{i\cdot}\beta + \phi\sum_{j=1}^n \frac{W_{ij}}{D_{ii}} ~ \big(y(s_j)-X_{j\cdot}\beta\big),~ \sigma^2 D^{-1}_{ii} \right) $$
+
+* Joint Model
+\pause
+$$\symbf{y} \sim \mathcal{N}(\symbf{X}\symbf{\beta},~\Sigma_{CAR})$$
+\pause
+$$ \begin{aligned}
+\Sigma_{CAR}
+  &= (\symbf{D}_{\sigma} \, (\symbf{I}-\phi \symbf{D}^{-1}\symbf{W}))^{-1} \\
+  &= (1/\sigma^2 \symbf{D} \, (\symbf{I}-\phi \symbf{D}^{-1}\symbf{W}))^{-1} \\
+  &= (1/\sigma^2 (\symbf{D}-\phi \symbf{W}))^{-1} \\
+  &= \sigma^2(\symbf{D}-\phi \symbf{W})^{-1}
+\end{aligned}
+$$
+
+
+
+
+
+## Toy CAR Example {.t}
+
+```{r echo=FALSE, fig.width=6, fig.height=3.5, out.width="0.6\\textwidth", fig.align="center"}
+x = c(0,1,2)
+y = c(0,1,0)
+
+plot(x, y, pch=16, type="b", axes=FALSE,xlab="",ylab="", xlim=c(-0.2,2.2),ylim=c(-0.2,1.5))
+text(x+c(-0.1,0,0.1),y+c(0,0.2,0), labels = c("s1","s2","s3"))
+```
+
+. . .
+
+$$
+\symbf{W} = \begin{pmatrix}
+0 & 1 & 0 \\
+1 & 0 & 1 \\
+0 & 1 & 0 
+\end{pmatrix}
+\qquad\qquad
+\symbf{D} = \begin{pmatrix}
+1 & 0 & 0 \\
+0 & 2 & 0 \\
+0 & 0 & 1 
+\end{pmatrix}
+$$
+. . .
+
+$$
+\symbf{\Sigma} = \sigma^2 \, (\symbf{D} - \phi \, \symbf{W}) = \sigma^2~\begin{pmatrix}
+1 & -\phi & 0 \\
+-\phi & 2 & -\phi \\
+0 & -\phi & 1 
+\end{pmatrix}^{-1}
+$$
+
+## When does $\Sigma$ exist? {.t}
+
+```{r error=TRUE}
+check_sigma = function(phi) {
+  Sigma_inv = matrix(c(1,-phi,0,-phi,2,-phi,0,-phi,1), ncol=3, byrow=TRUE) 
+  solve(Sigma_inv)
+}
+
+check_sigma(phi=0)
+
+check_sigma(phi=0.5)
+
+check_sigma(phi=-0.6)
+```
+
+##
+
+```{r error=TRUE}
+check_sigma(phi=1)
+
+check_sigma(phi=-1)
+
+check_sigma(phi=1.2)
+
+check_sigma(phi=-1.2)
+```
+
+## When is $\Sigma$ positive semidefinite? {.t}
+
+```{r error=TRUE}
+check_sigma_pd = function(phi) {
+  Sigma_inv = matrix(c(1,-phi,0,-phi,2,-phi,0,-phi,1), ncol=3, byrow=TRUE) 
+  chol(solve(Sigma_inv))
+}
+
+check_sigma_pd(phi=0)
+
+check_sigma_pd(phi=0.5)
+
+check_sigma_pd(phi=-0.6)
+```
+
+##
+
+```{r error=TRUE}
+check_sigma_pd(phi=1)
+
+check_sigma_pd(phi=-1)
+
+check_sigma_pd(phi=1.2)
+
+check_sigma_pd(phi=-1.2)
+```
+
+
+## Conclusions {.t}
+
+Generally speaking just like the AR(1) model for time series we require that $|\phi| < 1$ for the CAR model to be proper.
+
+\vspace{4mm}
+
+
+These results for $\phi$ also apply in the context where $\sigma^2_i$ is constant across locations (i.e. $\symbf{\Sigma} = (\sigma^2 \, (\symbf{I}-\phi \symbf{D}^{-1}\symbf{W}))^{-1}$)
+
+\vspace{8mm}
+
+As a side note, the special case where $\phi=1$ is known as an intrinsic autoregressive (IAR) model and they are popular as an *improper* prior for spatial random effects. An additional sum constraint is necessary for identifiability ($\sum_{i=1}^n y(s_i) = 0$).
+
+
+## Example - NC SIDS
+
+```{r echo=FALSE}
+nc = st_read(system.file("shape/nc.shp", package="sf"), quiet = TRUE) %>% 
+  select(-(AREA:CNTY_ID), -(FIPS:CRESS_ID)) %>%
+  st_transform(st_crs("+proj=utm +zone=17 +ellps=GRS80 +datum=NAD83 +units=m +no_defs"))
+
+(ggplot() + geom_sf(data=nc, aes(fill=BIR74))) /
+(ggplot() + geom_sf(data=nc, aes(fill=SID74)))
+```
+
+##
+
+```{r}
+ggplot() + geom_sf(data=nc, aes(fill=SID74/BIR74*1000))
+```
+
+## Using `spautolm` from `spdep` {.t}
+
+```{r message=FALSE}
+library(spdep)
+
+W = st_touches(nc, sparse=FALSE)
+listW = mat2listw(W)
+
+listW
+```
+
+
+## {.t}
+
+```{r warning=FALSE}
+nc_coords = nc %>% st_centroid() %>% st_coordinates()
+
+plot(st_geometry(nc))
+plot(listW, nc_coords, add=TRUE, col="blue", pch=16)
+```
+
+## Moran's I
+
+\footnotesize
+
+```{r}
+spdep::moran.test(nc$SID74, listW)
+spdep::moran.test(1000*nc$SID74/nc$BIR74, listW)
+```
+
+## Geary's C
+
+```{r}
+spdep::geary.test(nc$SID74, listW)
+spdep::geary.test(nc$SID74/nc$BIR74, listW)
+```
+
+
+## CAR Model {.t}
+
+\scriptoutput
+
+```{r}
+nc_car = spautolm(formula = SID74/BIR74 ~ 1, data = nc, 
+                  listw = listW, family = "CAR") 
+
+summary(nc_car)
+```
+
+## SAR Model {.t}
+
+\scriptoutput
+
+```{r}
+nc_sar = spautolm(formula = SID74/BIR74 ~ 1, data = nc, 
+                  listw = listW, family = "SAR")
+
+summary(nc_sar)
+```
+
+## Predictions
+
+```{r echo=FALSE}
+nc$car_pred = nc_car$fit$fitted.values
+nc$sar_pred = nc_sar$fit$fitted.values
+
+nc$car_resid = nc_car$fit$residuals
+nc$sar_resid = nc_sar$fit$residuals
+```
+
+```{r echo=FALSE}
+( ggplot() + geom_sf(data=nc, aes(fill=car_pred)) ) / 
+( ggplot() + geom_sf(data=nc, aes(fill=sar_pred)) ) 
+```
+
+## Residuals
+
+```{r echo=FALSE}
+( ggplot() + geom_sf(data=nc, aes(fill=car_resid)) ) / 
+( ggplot() + geom_sf(data=nc, aes(fill=sar_resid)) ) 
+```
+
+## What's wrong?
+
+```{r echo=FALSE, fig.height=3}
+par(mfrow=c(1,3))
+
+hist(nc$SID74)
+hist(nc$SID74/nc$BIR74)
+qqnorm(nc$car_resid, main = "CAR Residuals");qqline(nc$car_resid)
+```
+
+## CAR vs SAR
+
+```{r echo=FALSE}
+plot(nc$car_resid, nc$sar_resid, main="CAR vs SAR Residuals")
+abline(a = 0, b=1, col="grey")
+```
+
+## Stan CAR Model {.t}
+
+\scriptoutput
+
+```{r message=FALSE}
+car_model = "
+data {
+  int<lower=0> N;
+  vector[N] y;
+  matrix[N,N] W;
+  matrix[N,N] D;
+}
+parameters {
+  vector[N] w_s;
+  real beta;
+  real<lower=0> sigma2;
+  real<lower=0> sigma2_w;
+  real<lower=0,upper=1> phi;
+}
+transformed parameters {
+  vector[N] y_pred = beta + w_s;
+}
+model {
+  matrix[N,N] Sigma_inv = (D - phi * W) / sigma2;  
+
+  w_s ~ multi_normal_prec(rep_vector(0,N), Sigma_inv);
+
+  beta ~ normal(0,10);
+  sigma2 ~ cauchy(0,5);
+  sigma2_w ~ cauchy(0,5);
+  
+  y ~ normal(beta+w_s, sigma2_w);
+}
+"
+```
+
+##
+
+```{r}
+data = list(
+  N = nrow(nc),
+  y = nc$SID74 / nc$BIR74,
+  W = W * 1,
+  D = diag(rowSums(W))
+)
+```
+
+```{r eval=FALSE}
+car_fit = rstan::stan(
+  model_code = car_model, data = data,
+  iter = 10000, chains = 1, thin=20
+)
+```
+
+```{r echo=FALSE}
+if (!file.exists("stan_car.rds")) {
+  car_fit = rstan::stan(
+    model_code = car_model, data = data,
+    iter = 10000, chains = 1, thin=20
+  )
+  saveRDS(car_fit, "stan_car.rds")
+} else {
+  car_fit = readRDS("stan_car.rds")
+}
+```
+
+. . .
+
+\vspace{10mm}
+
+Why don't we use the conditional definition for the $y$'s?
+
+
+## Model Results
+
+```{r echo=FALSE}
+car_params = tidybayes::gather_samples(car_fit, beta, phi, sigma2, sigma2_w)
+car_y_pred = tidybayes::gather_samples(car_fit, y_pred[i])
+```
+
+```{r echo=FALSE}
+ggplot(car_params) +
+  geom_line(aes(x=.iteration, y=estimate, color=term)) +
+  facet_grid(term~., scales = "free_y") +
+  guides(color=FALSE)
+```
+
+## Predictions
+
+```{r echo=FALSE}
+nc = car_y_pred %>%
+  ungroup() %>%
+  filter(.chain == 1) %>% 
+  group_by(i) %>% 
+  summarize(
+    bayes_car_pred = mean(estimate)
+  ) %>% 
+  bind_cols(nc, .) %>%
+  mutate(
+    bayes_car_resid = SID74/BIR74 - bayes_car_pred
+  )
+```
+
+##
+
+```{r echo=FALSE, fig.height=5}
+(ggplot() + geom_sf(data=nc, aes(fill=bayes_car_pred))) /
+(ggplot() + geom_sf(data=nc, aes(fill=bayes_car_resid))) 
+```
+
+##
+
+```{r echo=FALSE}
+ggplot(nc, aes(x=car_pred, y=bayes_car_pred)) + 
+  geom_point() + 
+  geom_abline(intercept = 0, slope = 1) +
+  xlim(0,0.003) + ylim(0,0.003)
+```
+
+
+## Brief Aside - SAR Precision Matrix
+
+$$ 
+\Sigma_{SAR} = (\symbf{I}-\phi \symbf{D}^{-1} \, \symbf{W})^{-1} \sigma^2 \, \symbf{D}^{-1} \left((\symbf{I}-\phi \symbf{D}^{-1} \, \symbf{W})^{-1}\right)^t
+$$
+
+\vspace{6mm}
+
+$$ \begin{aligned}
+\Sigma^{-1}_{SAR} 
+  &= \left( (\symbf{I}-\phi \symbf{D}^{-1} \, \symbf{W})^{-1} \sigma^2 \, \symbf{D}^{-1} \left((\symbf{I}-\phi \symbf{D}^{-1} \, \symbf{W})^{-1}\right)^t \right)^{-1} \\
+  &= \left( \left( (\symbf{I}-\phi \symbf{D}^{-1} \, \symbf{W})^{-1}\right)^t\right)^{-1} \frac{1}{\sigma^2} \, \symbf{D} ~ (\symbf{I}-\phi \symbf{D}^{-1} \, \symbf{W}) \\
+  &= \frac{1}{\sigma^2} \, (\symbf{I}-\phi \symbf{D}^{-1} \, \symbf{W})^t ~ \symbf{D} ~ (\symbf{I}-\phi \symbf{D}^{-1} \, \symbf{W}) \\
+\end{aligned}$$
+
+## Jags SAR Model {.t}
+
+\tinyoutput
+
+\begincols
+
+\begincol{0.5\textwidth}
+
+```{r}
+sar_model = "
+data {
+  int<lower=0> N;
+  vector[N] y;
+  matrix[N,N] W_tilde;
+  matrix[N,N] D;
+}
+transformed data {
+  matrix[N,N] I = diag_matrix(rep_vector(1, N));
+}
+parameters {
+  vector[N] w_s;
+  real beta;
+  real<lower=0> sigma2;
+  real<lower=0> sigma2_w;
+  real<lower=0,upper=1> phi;
+}
+transformed parameters {
+  vector[N] y_pred = beta + w_s;
+}
+model {
+  matrix[N,N] C = I - phi * W_tilde;
+  matrix[N,N] Sigma_inv = C' * D * C / sigma2;  
+  
+  w_s ~ multi_normal_prec(rep_vector(0,N), Sigma_inv);
+
+  beta ~ normal(0,10);
+  sigma2 ~ cauchy(0,5);
+  sigma2_w ~ cauchy(0,5);
+
+  y ~ normal(beta + w_s, sigma2_w);
+}
+"
+```
+
+\endcol
+
+\begincol{0.5\textwidth}
+
+```{r}
+D = diag(rowSums(W))
+D_inv = diag(1/diag(D))
+data = list(
+  N = nrow(nc),
+  y = nc$SID74 / nc$BIR74,
+  x = rep(1, nrow(nc)),
+  D_inv = D_inv,
+  W_tilde = D_inv %*% W
+)
+```
+
+```{r eval=FALSE}
+sar_fit = rstan::stan(
+  model_code = sar_model, data = data,
+  iter = 10000, chains = 1, thin=20
+)
+```
+
+```{r echo=FALSE}
+if (!file.exists("stan_sar.rds")) {
+  sar_fit = rstan::stan(
+    model_code = sar_model, data = data,
+    iter = 10000, chains = 1, thin=20
+  )
+  saveRDS(sar_fit, "stan_sar.rds")
+} else {
+  sar_fit = readRDS("stan_sar.rds")
+}
+```
+
+\endcol
+
+\endcols
+
+## Model Results
+
+```{r echo=FALSE}
+sar_params = tidybayes::gather_samples(sar_fit, beta, phi, sigma2, sigma2_w)
+sar_y_pred = tidybayes::gather_samples(sar_fit, y_pred[i])
+```
+
+```{r echo=FALSE}
+ggplot(sar_params) +
+  geom_line(aes(x=.iteration, y=estimate, color=term)) +
+  facet_grid(term~., scales = "free_y") +
+  guides(color=FALSE)
+```
+
+## Predictions {.t}
+
+```{r echo=FALSE}
+nc = sar_y_pred %>%
+  ungroup() %>%
+  filter(.chain == 1) %>% 
+  group_by(i) %>% 
+  summarize(
+    bayes_sar_pred = mean(estimate)
+  ) %>% 
+  bind_cols(nc, .) %>%
+  mutate(
+    bayes_sar_resid = SID74/BIR74 - bayes_sar_pred
+  )
+```
+
+```{r echo=FALSE, fig.height=5}
+(ggplot() + geom_sf(data=nc, aes(fill=bayes_sar_pred))) /
+(ggplot() + geom_sf(data=nc, aes(fill=bayes_sar_resid))) 
+```
+
+##
+
+```{r echo=FALSE}
+ggplot(nc, aes(x=sar_pred, y=bayes_sar_pred)) + 
+  geom_point() + 
+  geom_abline(intercept = 0, slope = 1) +
+  xlim(0,0.003) + ylim(0,0.003)
+```
+
+## Comparing Predictions {.t}
+
+```{r}
+# RMSE
+sqrt(mean(nc$bayes_car_resid^2))
+
+sqrt(mean(nc$bayes_sar_resid^2))
+
+sqrt(mean(nc$car_resid^2))
+
+sqrt(mean(nc$sar_resid^2))
+```
+
+## Comparing Parameters
+
+```{r echo=FALSE, warning=FALSE}
+d = bind_rows(
+  mutate(car_params, model = "Stan CAR"),
+  mutate(sar_params, model = "Stan SAR")
+) %>%
+  group_by(model, term) %>%
+  summarize(
+    low = quantile(estimate, probs=0.025),
+    upp = quantile(estimate, probs=0.975),
+    estimate = mean(estimate)
+  ) %>%
+  #bind_rows(
+  #  data_frame(model="spautolm CAR", term = c("beta","phi","sigma2", "sigma2_w"), 
+  #             estimate = c(nc_car$fit$coefficients, nc_car$lambda, nc_sar$fit$imat, nc_car$fit$s2),
+  #             low=NA, upp=NA), 
+  #  data_frame(model="spautolm SAR", term = c("beta","phi","sigma2", "sigma2_w"), 
+  #             estimate = c(nc_sar$fit$coefficients, nc_sar$lambda, nc_sar$fit$imat, nc_sar$fit$s2),
+  #             low=NA, upp=NA)
+  #) %>%
+  ungroup() %>%
+  mutate(offset = as.integer( forcats::as_factor(model) ))
+
+ggplot(d, aes(y=offset, x=estimate, color=model)) +
+  geom_point(size=2) +
+  geom_errorbarh(aes(xmin=low, xmax=upp), height=0, size=1) +
+  facet_wrap(~term, scales="free_x") +
+  theme(axis.title.y = element_blank(),
+        axis.text.y  = element_blank(),
+        axis.ticks.y = element_blank()) +
+  ylim(-1,3)
+```
+
